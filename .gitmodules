@@ -1,0 +1,3 @@
+[submodule "src/arbor"]
+	path = src/arbor
+	url = https://github.com/ArborGames/Arbortechture.git
