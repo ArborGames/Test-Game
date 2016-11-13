@@ -5,12 +5,14 @@
  */
 package test.scenes;
 
+import arbor.control.ArborInput;
 import arbor.model.scene.Scene;
 import test.model.enemies.Enemy;
 import test.model.enemies.Soldier;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.scene.input.KeyCode;
 import test.world.Map;
 
 /**
@@ -37,9 +39,14 @@ public class TestScene extends Scene {
 
     @Override
     public void update() {
-        if (new Random().nextInt(100) > 95) {
+        //Test input class
+        if(ArborInput.getKey(KeyCode.E))
+        {
+            System.out.println("E pressed");
+        }
+        
+        if (new Random().nextInt(100) > 98) {
             enemyUnits.add(new Soldier(map.getPath()));
-            System.out.println("There is now " + enemyUnits.size() + " units.");
         }
 
         for (Enemy eu : enemyUnits) {
