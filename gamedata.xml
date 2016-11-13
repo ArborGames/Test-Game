@@ -1,0 +1,8 @@
+<game_data>
+	<Scenes>
+		<Scene>
+			<ClassPath>test.scenes.TestScene</ClassPath>
+			<SceneName>TestScene</SceneName>
+		</Scene>	
+	</Scenes>
+</game_data>
