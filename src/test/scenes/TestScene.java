@@ -39,12 +39,6 @@ public class TestScene extends Scene {
 
     @Override
     public void update() {
-        //Test input class
-        if(ArborInput.getKey(KeyCode.E))
-        {
-            System.out.println("E pressed");
-        }
-        
         if (new Random().nextInt(100) > 98) {
             enemyUnits.add(new Soldier(map.getPath()));
         }
@@ -68,8 +62,9 @@ public class TestScene extends Scene {
         //TODO: This can cause one-frame issues if someone is deleted while we are rendering
         for (int i = 0; i < enemyUnits.size(); i++) {
             Enemy eu = enemyUnits.get(i);
-            if(eu == null || eu.isDone())
+            if (eu == null || eu.isDone()) {
                 continue;
+            }
             eu.render(canvas);
         }
     }
