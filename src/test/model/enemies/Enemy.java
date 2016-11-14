@@ -20,6 +20,7 @@ public abstract class Enemy extends RenderableObject {
     private Path path;
 
     private boolean isDone = false;
+    private int health = 100;
 
     public Enemy() {
         super();
@@ -59,7 +60,7 @@ public abstract class Enemy extends RenderableObject {
         ArborVector dir = ArborVector.sub(nextPoint, currPoint);
 
         float sqrMag = dir.sqrMagnitude();
-        
+
         //If we are closer to it than we would normally be, move that distance
         if (sqrMag < speed * speed) {
             position.set(nextPoint);
@@ -100,5 +101,21 @@ public abstract class Enemy extends RenderableObject {
     @Override
     public void update() {
         followPath();
+    }
+
+    public int getPathIndex() {
+        return currentPathIndex;
+    }
+
+    public float getDistanceToNextPoint() {
+        return ArborVector.sub(path.getPoint(currentPathIndex + 1), position).magnitude();
+    }
+
+    public void damage(int damage) {
+        health -= damage;
+        //TODO: Death
+        if (health <= 0) {
+            isDone = true;
+        }
     }
 }
