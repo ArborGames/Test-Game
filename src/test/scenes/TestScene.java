@@ -11,6 +11,7 @@ import arbor.model.RenderableObject;
 import arbor.model.scene.Scene;
 import arbor.util.ArborVector;
 import arbor.view.Camera;
+import arbor.view.ui.UIButton;
 import test.model.enemies.Enemy;
 import test.model.enemies.Soldier;
 import java.awt.Graphics2D;
@@ -39,6 +40,7 @@ public class TestScene extends Scene {
     @Override
     public boolean onEnter() {
         objects.add(new Soldier(map.getPath()));
+        objects.add(new UIButton(new ArborVector(325,5), new ArborVector(100,100)));
         return true;
     }
 
