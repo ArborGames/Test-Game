@@ -6,13 +6,16 @@
 package test.scenes;
 
 import arbor.control.ArborInput;
+import arbor.model.ArborObject;
+import arbor.model.RenderableObject;
 import arbor.model.scene.Scene;
+import arbor.view.Camera;
 import test.model.enemies.Enemy;
 import test.model.enemies.Soldier;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Random;
-import javafx.scene.input.KeyCode;
+import test.model.turrets.Turret;
 import test.world.Map;
 
 /**
@@ -21,37 +24,53 @@ import test.world.Map;
  */
 public class TestScene extends Scene {
 
-    private ArrayList<Enemy> enemyUnits = new ArrayList<>();
-    private ArrayList<Enemy> toRemove = new ArrayList<>();
+    private ArrayList<ArborObject> objects = new ArrayList<>();
+    private ArrayList<ArborObject> toRemove = new ArrayList<>();
     Map map = new Map("map_01.map");
 
     @Override
     public boolean onExit() {
-        enemyUnits.clear();
+        objects.clear();
         return true;
     }
 
     @Override
     public boolean onEnter() {
-        enemyUnits.add(new Soldier(map.getPath()));
+        objects.add(new Soldier(map.getPath()));
         return true;
     }
 
     @Override
     public void update() {
-        if (new Random().nextInt(100) > 98) {
-            enemyUnits.add(new Soldier(map.getPath()));
+        //Scale camera based on player input.
+        Camera.main.shiftScale(-ArborInput.getMouseWheelDelta() / 10f);
+
+        //Place turrets
+        if (ArborInput.getMouseButtonDown(1)) {
+            Turret t = new Turret();
+            if (map.placeBuilding(t, ArborInput.getScaledMousePoisition())) {
+                objects.add(t);
+                System.out.println("Turret added.");
+            }
+            else
+            {
+                System.out.println("Turret rejected.");  
+            }
         }
 
-        for (Enemy eu : enemyUnits) {
+        if (new Random().nextInt(100) > 98) {
+            objects.add(new Soldier(map.getPath()));
+        }
+
+        for (ArborObject eu : objects) {
             eu.update();
-            if (eu.isDone()) {
+            if (eu instanceof Enemy && ((Enemy) eu).isDone()) {
                 toRemove.add(eu);
             }
         }
 
-        for (Enemy eu : toRemove) {
-            enemyUnits.remove(eu);
+        for (ArborObject eu : toRemove) {
+            objects.remove(eu);
         }
         toRemove.clear();
     }
@@ -60,12 +79,15 @@ public class TestScene extends Scene {
     public void render(Graphics2D canvas) {
         map.render(canvas);
         //TODO: This can cause one-frame issues if someone is deleted while we are rendering
-        for (int i = 0; i < enemyUnits.size(); i++) {
-            Enemy eu = enemyUnits.get(i);
-            if (eu == null || eu.isDone()) {
-                continue;
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects.get(i) instanceof RenderableObject) {
+                RenderableObject eu = (RenderableObject)objects.get(i);
+                if (eu == null || (eu instanceof Enemy && ((Enemy) eu).isDone())) {
+                    continue;
+                }
+                eu.render(canvas);
             }
-            eu.render(canvas);
+
         }
     }
 

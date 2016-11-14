@@ -8,6 +8,7 @@ package test.world;
 import arbor.util.ArborVector;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import test.model.turrets.Turret;
 import test.util.MapReader;
 
 /**
@@ -46,5 +47,27 @@ public class Map {
                 t.render(canvas);
             }
         }
+    }
+
+    public ArborVector screenToMapCoordinates(ArborVector screenCoords) {
+        return ArborVector.div(screenCoords, MapReader.MAP_SCALE);
+    }
+
+    //TODO: Tidy
+    public boolean placeBuilding(Turret t, ArborVector screenPosition) {
+        ArborVector gridPos = screenToMapCoordinates(screenPosition);
+        int x = (int)gridPos.x;
+        int y = (int)gridPos.y;
+        if(x < 0 || y < 0 || x >= buildingMap.length || y >= buildingMap[0].length)
+        {
+            return false;
+        }
+        //0 = FREE, 1 = TAKEN, -1 = UNPLACEABLE
+        if (buildingMap[x][y] == 0) {
+            t.setPosition(new ArborVector(x * MapReader.MAP_SCALE, y * MapReader.MAP_SCALE));
+            buildingMap[x][y] = 1;
+            return true;
+        }
+        return false;
     }
 }

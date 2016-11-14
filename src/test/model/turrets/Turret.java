@@ -7,6 +7,7 @@
 package test.model.turrets;
 
 import arbor.model.RenderableObject;
+import arbor.util.ArborVector;
 
 /**
  *
@@ -19,11 +20,20 @@ public class Turret extends RenderableObject{
     private float rateOfFire = 10f;
     
     public Turret() {
+        this(0f,0f,0f);
     }
 
     public Turret(float x, float y, float rotation) {
         super(x, y, rotation);
+        setImage("towerDefense_tile249.png", 64, 64);
     }
+
+    public Turret(ArborVector position, float rotation) {
+        super(position, rotation);
+        setImage("towerDefense_tile249.png", 64, 64);
+    }
+    
+    
 
     @Override
     public void update() {
